@@ -1,0 +1,289 @@
+<div class="row mt-5">
+    <div class="col-md-3">
+        <div class="list-group">
+            <a  class="list-group-item list-group-item-action" 
+                (click)="switchScreen('cadastro')">Cadastro</a>
+            <a  class="list-group-item list-group-item-action"
+                (click)="switchScreen('consultas')">Consultas</a>
+            <a class="list-group-item list-group-item-action"
+                (click)="switchScreen('relatorios')">Relatórios</a>
+        </div>
+    </div>
+
+
+
+    <!-- Formulário de Cadastro de Funcionários-->
+    <!-- Formulário de Cadastro de Funcionários-->
+    <!-- Formulário de Cadastro de Funcionários-->
+    <!-- Formulário de Cadastro de Funcionários-->
+    <ng-template [ngIf]="showCadastro">
+        <div class="col-md-9 border">
+            <h4 class="mt-2">Cadastro de Funcionários:</h4>
+            <div *ngIf="showMsgSuccess" class="alert alert-success">Cadastro efetuado com sucesso!</div>
+            <form [formGroup]="cadastroForm" (ngSubmit)="onSubmit()" class="mt-3 ">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <input type="text" class="form-control"  formControlName="nome" id="nome" maxlength="40"  placeholder="Nome"  />
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input type="text" class="form-control" formControlName="cpf" id="cpf" mask="000.000.000-00" placeholder="CPF"  />
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input type="text" class="form-control" formControlName="dtNascimento" id="dtNascimento" [dropSpecialCharacters]="false" mask="00/00/0000" placeholder="Data de Nascimento"  />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <input type="text" class="form-control"  formControlName="login" id="login" maxlength="12" placeholder="Login"  />
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input type="password" class="form-control"  formControlName="senha" id="senha" maxlength="12" placeholder="Senha "  />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <button type="submit" [disabled]="cadastroForm.invalid" class="btn btn-primary btn-block">
+                            Cadastrar 
+                        </button>
+                    </div>
+                </div>
+
+                <p *ngIf="cadastroForm.invalid" class="text-danger">Todos os campos são requeridos.</p>
+        
+                
+            </form>
+        </div>
+    </ng-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Formulário de Consulta de Funcionários-->
+    <!-- Formulário de Consulta de Funcionários-->
+    <!-- Formulário de Consulta de Funcionários-->
+    <!-- Formulário de Consulta de Funcionários-->
+    <ng-template [ngIf]="showConsulta">
+        <div class="col-md-9 border">
+            <h4 class="mt-2">Consulta de Funcionários:</h4>
+
+            <form [formGroup]="consultaForm" (ngSubmit)="onSubmit()" class="mt-3 ">
+                <div class="form-row">
+                    <div class="input-group col-md-6">
+                          <input type="text" 
+                            class="form-control border-right-0 border" 
+                            id="consulta" 
+                            placeholder="Consulta por CPF ou Nome" 
+                            formControlName="descricao" >
+                        
+                        <span class="input-group-append icon-search">
+                            <button class="btn btn-outline-secondary border-left-0 border" (click)="onSearch()" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </span>
+                    </div>        
+                        
+                    <div class="input-group col-md-2 mt-1">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="customRadio1" name="searchMode" [(ngModel)]="searchMode" formControlName="searchMode" value="cpf" class="custom-control-input">
+                            <label class="custom-control-label" for="customRadio1">Por CPF</label>
+                            
+                        </div>
+    
+                    </div>
+                    <div class="input-group col-md-2 mt-1">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="customRadio2" name="searchMode" [(ngModel)]="searchMode" formControlName="searchMode" value="nome" class="custom-control-input">
+                            <label class="custom-control-label" for="customRadio2">Por Nome</label>
+                        </div>
+                    </div>
+                    <p *ngIf="consultaForm.invalid" class="text-danger">Todos os campos são requeridos.</p>
+                    <p *ngIf="errorConsulta" class="text-danger">Nenhum usuário encontrado com esse termo.</p>
+                </div>
+            </form>
+            <div class="row">
+                <div class="col-md-12">
+                    
+                    <table class="table table-responsive table-hover">
+                        <thead>
+                            <tr>
+                                <th>Usuário</th>
+                                <th>Nome</th>
+                                <th>CPF</th>
+                                <th>Data de Nascimento</th>
+                            </tr>
+                        </thead>
+
+                        <tbody *ngIf="searchMode == 'cpf'">
+                            <tr>
+                                <td>{{fetchUser.usuario}}</td>
+                                <td>{{fetchUser.pessoa.nome}}</td>
+                                <td>{{fetchUser.pessoa.cpf}}</td>
+                                <td>{{fetchUser.pessoa.dtNascimento}}</td>
+                            </tr>
+                        </tbody>
+                        <tbody *ngIf="searchMode == 'nome'">
+                            <tr *ngFor="let user of fetchUsers">
+                                <td>{{user.usuario}}</td>
+                                <td>{{user.pessoa.nome}}</td>
+                                <td>{{user.pessoa.cpf}}</td>
+                                <td>{{user.pessoa.dtNascimento}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+
+    </ng-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Formulário de Relatórios de Funcionários-->
+    <!-- Formulário de Relatórios de Funcionários-->
+    <!-- Formulário de Relatórios de Funcionários-->
+    <!-- Formulário de Relatórios de Funcionários-->
+    <ng-template [ngIf]="showRelatorio">
+        <div  class="col-md-9 border">
+            <h4 class="mt-2">Relatório de Funcionários</h4>
+            <label>Funcionários aniversariantes no período:</label>
+            <form >
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label>De</label>
+                        <input type="text"
+                            name="startDate"
+                            [dropSpecialCharacters]="false" mask="00/00/0000"
+                            class="form-control" [(ngModel)]="startDate"/>
+
+                    </div>
+                    
+                    <div class="form-group col-md-4">
+                        <label>Até</label>
+                        <input type="text"
+                         name="endDate" 
+                         [dropSpecialCharacters]="false" mask="00/00/0000"    
+                         class="form-control" [(ngModel)]="endDate"/>
+                    </div>
+
+                </div>
+                <p *ngIf="startDate == '' || endDate == ''"  class="text-danger">Todos os campos são requeridos. </p>
+
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <button type="submit" [disabled]="startDate == '' || endDate == ''" (click)="onRelatorio()" class="btn btn-primary btn-block">
+                            Buscar 
+                        </button>                        
+                    </div>
+                    <div class="form-group col-md-3">
+                        <app-angular2csv [data]="fetchPessoa" filename="funcionarios.csv" [options]="options">
+                            <button type="button" class="btn btn-secondary"><span class="fa fa-download"></span> 
+                                Download CSV
+                            </button>
+                        </app-angular2csv>
+                    </div>
+                </div>
+
+                <p *ngIf="errorRelatorio" class="text-danger">Nenhuma pesquisa encontrada.</p>
+            </form>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-responsive table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Data de Nascimento</th>
+                                <th>CPF</th>
+                                <th>Data do Cadastro</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let pessoa of fetchPessoa">
+                                <td>{{pessoa.nome}}</td>
+                                <td>{{pessoa.dtNascimento}}</td>
+                                <td>{{pessoa.cpf}}</td>
+                                <td>{{pessoa.createdAt}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+</div>

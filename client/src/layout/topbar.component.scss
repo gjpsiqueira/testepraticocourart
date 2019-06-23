@@ -1,0 +1,18 @@
+.navbar-dark .navbar-nav .nav-link {
+    height: 100%;
+    padding: 10px 8px;
+}
+.navbar-dark .navbar-nav > .active{
+    color: #000;
+    background: #FFFF;
+    
+
+}
+.navbar-dark .navbar-nav > .active > a,
+.navbar-dark .navbar-nav > .active > a:hover,
+.navbar-dark .navbar-nav > .active > a:focus {
+    color: #000;
+    background: #FFF;
+
+
+}

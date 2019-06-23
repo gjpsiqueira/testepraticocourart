@@ -1,0 +1,506 @@
+
+<div class="row mt-5">
+
+
+
+
+    <div class="col-md-3">
+        <div class="list-group">
+            <a  class="list-group-item list-group-item-action" 
+                (click)="switchScreen('cadastro')">Cadastro</a>
+            <a  class="list-group-item list-group-item-action"
+                (click)="switchScreen('consultas')">Consultas</a>
+            <a class="list-group-item list-group-item-action"
+                (click)="switchScreen('relatorios')">Relatórios</a>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+    <!-- Formulário de cadastro de Veículos-->
+    <!-- Formulário de cadastro de Veículos-->
+    <!-- Formulário de cadastro de Veículos-->
+    <!-- Formulário de cadastro de Veículos-->
+    <ng-template [ngIf]="showCadastro">
+        <div class="col-md-9 border">
+            <h4 class="mt-2">Cadastro de Veículos:</h4>
+            <div *ngIf="showMsgSuccessVeiculo" class="alert alert-success">Cadastro efetuado com sucesso!</div>
+            <form [formGroup]="cadastroVeiculoForm" class="mt-3 " action="#">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <input type="text" class="form-control"  id="placa" formControlName="placa" placeholder="Placa" required>
+                    </div>
+                        
+                
+                    <div class="form-group col-md-4">
+                        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" formControlName="ativo" required>
+                            <option value="">Ativo</option>
+                            <option value="true">Sim</option>
+                            <option value="false">Não</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <input type="text" class="form-control" id="chassi" placeholder="Chassi" formControlName="chassi" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input type="text" class="form-control" id="anoFabricacao" maxlength="4" placeholder="Ano Fabricação" formControlName="anoFabricacao" required>
+                    </div>              
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <input type="text" class="form-control" id="Cor" placeholder="Cor" formControlName="cor" required>
+                    </div>      
+                    <div class="form-group col-md-4">
+                        <select class="custom-select mr-sm-2" id="modelo" formControlName="modeloId">
+                            <option value="">Selecione</option>
+                            <option *ngFor="let modelos of modelos" [value]="modelos.id">
+                                {{modelos.descricao}}
+                            </option>
+                        </select>
+                    </div>
+                
+                    <div class="form-group col-md-4">
+                        <a class="icon-add" data-toggle="modal" data-target="#addModelosModal" style="cursor:pointer">
+                            <span>
+                                <i class="fas fa-plus-circle fa-lg"></i>
+                            </span>
+                        </a>
+                    </div>                
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <button type="submit" class="btn btn-primary btn-block" [disabled]="loading" (click)="onSubmitVeiculo()">
+                            Cadastrar <i class="fas fa-spinner fa-spin" *ngIf="loading"></i>
+                        </button>
+                    </div>
+                </div>
+                <p *ngIf="cadastroVeiculoForm.invalid" class="text-danger">Todos os campos são requeridos.</p>
+
+            </form>
+        </div>
+    </ng-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Formulário de Consulta de Veículos -->
+    <!-- Formulário de Consulta de Veículos -->
+    <!-- Formulário de Consulta de Veículos -->
+    <!-- Formulário de Consulta de Veículos -->
+    <ng-template [ngIf]="showConsulta">
+        <div class="col-md-9 border">
+            <h4 class="mt-2">Consulta de Veículos:</h4>
+            <form class="mt-3 " action="#">
+                <div class="form-row">
+                    <div class="input-group col-md-8">
+                        <input type="text" class="form-control py-2 border-right-0 border" id="consulta" 
+                            placeholder="Consulta por Placa/Veículo" 
+                            [formControl]="consultaVeiculo" required>
+                        <span class="input-group-append icon-search">
+                            <button class="btn btn-outline-secondary border-left-0 border" (click)="onSearchVeiculo()" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </span>
+                    </div>        
+                    
+                    <div class="input-group col-md-1 mt-1">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="customRadio1" name="customRadio" [(ngModel)]="searchMode" value="placa" class="custom-control-input">
+                            <label class="custom-control-label" for="customRadio1">Placa</label>
+                         
+                        </div>
+    
+                    </div>
+                    <div class="input-group col-md-2 mt-1">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="customRadio2" name="customRadio" [(ngModel)]="searchMode" value="modelo" class="custom-control-input">
+                            <label class="custom-control-label" for="customRadio2">Modelo</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row mt-3">
+                    <div class="col-md-8">
+                        <div *ngIf="errorConsulta" class="alert alert-danger">Nenhuma consulta foi encontrada!</div>
+                    </div>
+                </div>
+
+                <!-- Se existe algum valor -->
+                <!-- Se existe algum valor -->
+                <!-- Se existe algum valor -->
+
+                <div class="form-row">    
+                   <div class="col-md-12">
+                        <div class="">
+                                <table class="table table-responsive table-hover">
+                                    <thead>
+                                        <tr>
+                                        <th scope="col">Placa</th>
+                                        <th scope="col">Chassi</th>
+                                        <th scope="col">Cor</th>
+                                        <th scope="col">Ativo</th>
+                                        <th scope="col">Ano Fabricação</th>
+                                        <th scope="col">Modelo</th>
+                                        <th scope="col">Ano</th>
+                                        <th scope="col">Consumo Médio</th>
+                                        <th scope="col">Quantidade Passageiro</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody *ngIf="searchMode == 'placa'">
+                                        <tr>
+                                            <td>{{fetchVeiculo.placa}}</td>
+                                            <td>{{fetchVeiculo.chassi}}</td>
+                                            <td>{{fetchVeiculo.cor}}</td>
+                                            <td>
+                                                <div *ngIf="fetchVeiculo.ativo === true">
+                                                    <i style="color:green" class="fas fa-check"></i>
+                                                </div>
+                                                <div *ngIf="fetchVeiculo.ativo === false">
+                                                    <i style="color:firebrick;" class="fas fa-times"></i>
+                                                </div>
+                                            </td>
+                                            <td>{{fetchVeiculo.anoFabricacao}}</td>
+                                            <td>{{fetchVeiculo.modelo.descricao}}</td>
+                                            <td>{{fetchVeiculo.modelo.ano}}</td>
+                                            <td>{{fetchVeiculo.modelo.consumoMedioKm}}</td>
+                                            <td>{{fetchVeiculo.modelo.qtdPassageiro}}</td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody *ngIf="searchMode == 'modelo'">
+                                        <tr *ngFor="let veiculo of fetchVeiculo">
+                                            <td>{{veiculo.placa}}</td>
+                                            <td>{{veiculo.chassi}}</td>
+                                            <td>{{veiculo.cor}}</td>
+                                            <td>
+                                                <div *ngIf="veiculo.ativo === true">
+                                                    <i style="color:green" class="fas fa-check"></i>
+                                                </div>
+                                                <div *ngIf="veiculo.ativo === false">
+                                                    <i style="color:firebrick;" class="fas fa-times"></i>
+                                                </div>
+                                            </td>
+                                            <td>{{veiculo.anoFabricacao}}</td>
+                                            <td>{{veiculo.modelo.descricao}}</td>
+                                            <td>{{veiculo.modelo.ano}}</td>
+                                            <td>{{veiculo.modelo.consumoMedioKm}}</td>
+                                            <td>{{veiculo.modelo.qtdPassageiro}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                        </div>
+                   </div>
+
+
+                </div>
+            </form>
+        </div>
+    </ng-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Formulário de Relatórios de Veículos -->
+    <!-- Formulário de Relatórios de Veículos -->
+    <!-- Formulário de Relatórios de Veículos -->
+    <!-- Formulário de Relatórios de Veículos -->
+    <ng-template [ngIf]="showRelatorios">
+            <div class="col-md-9 border">
+                <h4 class="mt-2">Relatório de Veículos:</h4>
+                <label>Veículos que foram ativados no período:</label>
+                <form class="mt-3 " action="#">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label>De:</label>
+                            <input type="text"
+                            name="startDate"
+                            [dropSpecialCharacters]="false" mask="00/00/0000"
+                            class="form-control" [(ngModel)]="startDate"/>
+                        </div> 
+
+                        <div class="form-group col-md-4">
+                            <label>Até</label>
+                            <input type="text"
+                                name="endDate" 
+                                [dropSpecialCharacters]="false" mask="00/00/0000"    
+                                class="form-control" [(ngModel)]="endDate"/>                            
+                        </div>
+                    </div>
+
+                    <p *ngIf="startDate == '' || endDate == ''"  class="text-danger">Todos os campos são requeridos. </p>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <button type="submit" [disabled]="startDate == '' || endDate == ''" (click)="onRelatorio()" class="btn btn-primary btn-block">
+                                Buscar 
+                            </button>                        
+                        </div>
+                        <div class="form-group col-md-3">
+                            <app-angular2csv [data]="fetchVeiculo" filename="veiculo.csv" [options]="options">
+                                <button type="button" class="btn btn-secondary"><span class="fa fa-download"></span> 
+                                    Download CSV
+                                </button>
+                            </app-angular2csv>
+                        </div>
+                    </div>
+                    <p *ngIf="errorRelatorio" class="text-danger">Nenhuma pesquisa encontrada.</p>
+                </form>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-responsive table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Placa</th>
+                                    <th>Ano Fabricação</th>
+                                    <th>Chassi</th>
+                                    <th>Cor</th>
+                                    <th>Ativo</th>
+                                    <th>Data Cadastro</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let veiculo of fetchVeiculo">
+                                    <td>{{veiculo.placa}}</td>
+                                    <td>{{veiculo.anoFabricacao}}</td>
+                                    <td>{{veiculo.chassi}}</td>
+                                    <td>{{veiculo.cor}}</td>
+                                    <td>
+                                        <div *ngIf="veiculo.ativo === true">
+                                            <i style="color:green" class="fas fa-check"></i>
+                                        </div>
+                                        <div *ngIf="veiculo.ativo === false">
+                                            <i style="color:firebrick;" class="fas fa-times"></i>
+                                        </div>
+                                    </td>
+                                    <td>{{veiculo.dataCadastro}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+
+    </ng-template>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Modal Cadastro de Modelo -->
+<!-- Modal Cadastro de Modelo  -->
+<!-- Modal Cadastro de Modelo  -->
+<div class="modal fade" id="addModelosModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cadastro de Modelo</h5>
+                <button type="button" class="close" data-dismiss="modal" (click)="closeModal()" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="cadastroModeloForm">
+                    <div *ngIf="showMsgSuccessModelo" class="alert alert-success">Cadastro efetuado com sucesso!</div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" id="modeloDescricao" formControlName="descricao" maxlength="30" placeholder="Descrição" required>
+                        </div>
+                            
+                            
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" id="modeloAno" maxlength="4" mask="0000" formControlName="ano" placeholder="Ano">
+                        </div>
+                        
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" id="modeloConsumoMedioKm" mask="00.0" [dropSpecialCharacters]="false" formControlName="consumoMedioKm" placeholder="Consumo Médio por KM">
+                        </div>
+                        
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" id="modeloQtdPassageiro" mask="0" formControlName="qtdPassageiro" placeholder="Quantidade de passageiros">
+                        </div>
+                            
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="closeModal()" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" [disabled]="loading" (click)="onSubmitModelo()">
+                            Cadastrar   <i class="fas fa-spinner fa-spin" *ngIf="loading"></i>
+                        </button>
+                    </div>
+                    <p *ngIf="cadastroModeloForm.invalid" class="text-danger">Todos os campos são requeridos.</p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
