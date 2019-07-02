@@ -41,17 +41,17 @@ iniciado no endereço: ```http://localhost:8080```
 2. Retorna veículos pelo seu modelo:
 
     - Request
-    ```GET http://localhost:8080//modelo/{id}```
+    ```GET http://localhost:8080/api/v1/modelo/{id}```
 
 3. Retorna veículo pela sua placa:
 
     - Request
-    ```GET  http://localhost:8080/placa/{placa}```
+    ```GET  http://localhost:8080/api/v1/placa/{placa}```
 
 4. Retorna veículos pela data de cadastro, e se veículo está ativo.
 
     - Request
-    ```GET http://localhost:8080/dt/{start}/{end}```
+    ```GET http://localhost:8080/api/v1/dt/{start}/{end}```
 
 5. Adiciona um novo usuário
 
